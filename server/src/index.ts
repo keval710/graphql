@@ -21,7 +21,7 @@ const server = new ApolloServer<{}>({
                 message: "Your query doesn't match the schema. Try double-checking it!",
             };
         }
-        console.log(formattedError)
+        // console.log('formattedError............', formattedError)
 
         // Otherwise return the formatted error. This error can also
         // be manipulated in other ways, as long as it's returned.
@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(cors());
 
 const getUserFromReq = async (req: any) => {
-    return false;
+    return req.headers.authorization ?? false;
 }
 // Start Apollo Server
 async function startServer() {

@@ -8,6 +8,10 @@ export const todoTypeDefs = gql`
     user: User
   }
 
+  type DeleteTodoResponse {
+    message: String!
+  }
+
   type Query {
     getAllTodos: [Todo!]!
     getTodoById(id: ID!): Todo
@@ -15,5 +19,6 @@ export const todoTypeDefs = gql`
 
   type Mutation {
     createTodo(userId: ID!, title: String!): Todo
+    deleteTodo(id: ID!): DeleteTodoResponse
   }
 `;

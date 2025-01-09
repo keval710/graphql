@@ -29,6 +29,10 @@ export const errorType = {
         statusCode: 400,
         message: "Failed to fetch"
     },
+    USER_NOT_FOUND: {
+        statusCode: 404,
+        message: "User not found"
+    },
     INVALID_INPUT: {
         statusCode: 400,
         message: "Invalid input"

@@ -1,4 +1,4 @@
-import { createTodoHandler, fetchTodoById, fetchTodos, fetchUserById } from "../../handler/handler";
+import { createTodoHandler, deleteTodoHandler, fetchTodoById, fetchTodos, fetchUserById } from "../../handler/handler";
 
 export const todoResolvers = {
     Query: {
@@ -50,6 +50,13 @@ export const todoResolvers = {
             } catch (error) {
                 console.error(error);
                 throw new Error('Failed to create todo');
+            }
+        },
+        deleteTodo: async (_parent: any, { id }: { id: string }) => {
+            try {
+                return await deleteTodoHandler(id);
+            } catch (error) {
+                throw new Error('Failed to delete todo');
             }
         }
     }

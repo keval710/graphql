@@ -20,7 +20,7 @@ export const fetchUserById = async (id: string) => {
         // Find the user by ID and populate the 'todos' field
         const user = await User.findOne({ _id: id }).populate('todos');
         if (!user) {
-            throw throwError(errorType.FAILED_FETCH.message, errorType.FAILED_FETCH);
+            throw throwError(errorType.USER_NOT_FOUND.message, errorType.USER_NOT_FOUND);
         }
         return user;
     } catch (error: any) {
@@ -36,6 +36,21 @@ export const createUserHandler = async (name: string, email: string) => {
     } catch (error) {
         console.error(error);
         throw new Error('Failed to create user');
+    }
+}
+
+export const deleteUserHandler = async (id: string) => {
+    try {
+        const user = await User.findOneAndDelete({ _id: id });
+        if (!user) {
+            throw throwError(errorType.FAILED_FETCH.message, errorType.FAILED_FETCH);
+        }
+        Todo.deleteMany({ userId: id }).exec(); // Delete all todos associated with the user
+        return {
+            message: 'User deleted successfully'
+        };
+    } catch (error: any) {
+        throw error;
     }
 }
 
@@ -79,3 +94,17 @@ export const createTodoHandler = async (userId: string, title: string) => {
         throw new Error('Failed to create todo');
     }
 };
+
+export const deleteTodoHandler = async (id: string) => {
+    try {
+        const todo = await Todo.findOneAndDelete({ _id: id });
+        if (!todo) {
+            throw throwError(errorType.FAILED_FETCH.message, errorType.FAILED_FETCH);
+        }
+        return {
+            message: 'Todo deleted successfully'
+        };
+    } catch (error: any) {
+        throw error;
+    }
+}

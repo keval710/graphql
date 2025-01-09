@@ -1,4 +1,4 @@
-import { createUserHandler, fetchUserById, fetchUsers } from "../../handler/handler";
+import { createUserHandler, deleteUserHandler, fetchUserById, fetchUsers } from "../../handler/handler";
 import { errorType } from '../../../helper/errorHandler';
 
 export const userResolvers = {
@@ -15,10 +15,10 @@ export const userResolvers = {
                 const res = await fetchUserById(id);
                 return res;
             } catch (error: any) {
-                if (error?.extensions?.code?.message === errorType.FAILED_FETCH.message) {
+                if (error?.extensions?.code?.message === errorType.USER_NOT_FOUND.message) {
                     return error;
                 } else {
-                    throw new Error();
+                    throw new Error('Failed to fetch user');
                 }
             }
         }
@@ -34,6 +34,13 @@ export const userResolvers = {
                 return await createUserHandler(name, email);
             } catch (error) {
                 throw new Error('Failed to create user');
+            }
+        },
+        deleteUser: async (_: any, { id }: any) => {
+            try {
+                return await deleteUserHandler(id);
+            } catch (error) {
+                throw new Error('Failed to delete user');
             }
         }
     }
