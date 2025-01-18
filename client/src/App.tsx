@@ -1,15 +1,17 @@
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
-import { ADD_TODO, ADD_USER, GET_TODOS_AND_USERS } from "./gql";
+import { ADD_TODO, ADD_USER, GET_TODOS_AND_USERS, UPLOAD_FILE } from "./gql";
 
 const App = () => {
   const { loading, error, data, refetch } = useQuery(GET_TODOS_AND_USERS);
-  const [addTodo, { }] = useMutation(ADD_TODO);
-  const [addUser, { }] = useMutation(ADD_USER);
+  const [addTodo] = useMutation(ADD_TODO);
+  const [addUser] = useMutation(ADD_USER);
+  const [uploadFile] = useMutation(UPLOAD_FILE);
   const [title, setTitle] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [file, setFile] = useState<File | null>(null);
 
   function handleTodoSubmit(e: any) {
     e.preventDefault();
@@ -37,6 +39,20 @@ const App = () => {
     refetch();
   }
 
+  async function handleFileUpload() {
+    if (!file) return;
+    try {
+      const res = await uploadFile({
+        variables: { file }
+      });
+      if (res.data) {
+        setFile(null);
+        return alert('File uploaded successfully!')
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
   return (
     <div className="min-h-screen bg-gray-100 py-3">
       <header className="text-center p-5 bg-gray-200 shadow-md">
@@ -77,6 +93,24 @@ const App = () => {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
+              </div>
+              <div className="flex gap-4">
+                <div>
+                  <input
+                    type="file"
+                    name="file"
+                    id="todo-file"
+                    className="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1"
+                    onChange={(e) => e.target.files?.length && setFile(e.target.files[0])}
+                  />
+                </div>
+                <div className="flex justify-center items-center">
+                  <button
+                    type="button"
+                    className="w-20 bg-blue-600 text-white py-2 rounded-md shadow-md hover:bg-blue-700"
+                    onClick={() => handleFileUpload()}
+                  >Upload</button>
+                </div>
               </div>
               <button
                 type="submit"

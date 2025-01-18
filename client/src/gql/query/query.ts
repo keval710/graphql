@@ -17,7 +17,7 @@ const GET_TODOS_AND_USERS = gql`
         completed
       }
   }
-  }
+}
 `;
 
 const ADD_TODO = gql`
@@ -35,8 +35,18 @@ mutation AddTodo($name: String!, $email: String!) {
 }
 `
 
+const UPLOAD_FILE = gql`
+mutation UploadFile($file: Upload!) {
+  uploadFile(file: $file) {
+    message
+    fileName
+  }
+}
+`
+
 export {
   GET_TODOS_AND_USERS,
   ADD_TODO,
-  ADD_USER
+  ADD_USER,
+  UPLOAD_FILE
 }

@@ -3,13 +3,17 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
-  cache: new InMemoryCache(),
-  headers: {
-    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsIn'
-  }
+  link: createUploadLink({
+    uri: 'http://localhost:4000/graphql',
+    headers: {
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsIn',
+      'Apollo-Require-Preflight': 'true',
+    }
+  }),
+  cache: new InMemoryCache()
 });
 
 createRoot(document.getElementById('root')!).render(
