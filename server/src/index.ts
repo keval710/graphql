@@ -10,6 +10,7 @@ import { graphqlUploadExpress } from "graphql-upload-ts";
 
 // Initialize Express
 const app = express();
+app.use("/files", express.static("files"));
 
 // Create Apollo Server with context
 const server = new ApolloServer<{}>({

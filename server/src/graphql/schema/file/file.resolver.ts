@@ -11,10 +11,24 @@ import path from "path";
 
 export const fileResolver = {
     Upload: GraphQLUpload,
+    Query: {
+        getFileUrls: async () => {
+            if (existsSync("files")) {
+                const files = readdirSync("files");
+                const urls = files.map((n) => `http://localhost:4000/files/${n}`);
+                return {
+                    urls
+                }
+            } else {
+                return {
+                    urls: []
+                }
+            };
+        }
+    },
     Mutation: {
         uploadFile: async (_: any, { file }: any) => {
             try {
-                console.log(file)
                 const { createReadStream, filename } = await file;
                 const fileStream = createReadStream();
                 const uploadPath = "files";

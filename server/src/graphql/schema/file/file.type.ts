@@ -7,7 +7,15 @@ type ResponseMessage {
     message: String!
     fileName: String!
 }
+
+type FileUrl {
+    urls: [String]!
+}
+
+type Query {
+    getFileUrls: FileUrl!
+}
 type Mutation {
-    uploadFile(file: Upload!): ResponseMessage
+    uploadFile(file: Upload!): ResponseMessage!
 }
 `;
